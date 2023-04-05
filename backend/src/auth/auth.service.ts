@@ -75,12 +75,15 @@ export class AuthService {
     }
   }
 
-  // return user object without password
+  // return user object without sensitive data
   sanitizeUser(user: UserDocument) {
     const sanitized = user.toObject();
-    delete sanitized['password'];
-    delete sanitized['passwordResetToken'];
-    return sanitized;
+
+    return {
+      _id: sanitized._id,
+      email: sanitized.email,
+      name: sanitized.name,
+    };
   }
 
   async forgotPassowrd(@Body() forgotObject: ForgotAuthDto) {
