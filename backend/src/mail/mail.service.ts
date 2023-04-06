@@ -7,7 +7,7 @@ export class MailService {
   constructor(private mailerService: MailerService) {}
 
   async sendUserConfirmation(user: User, resetToken: string) {
-    const url = `${process.env.FRONTEND_HOST}/auth/reset/${resetToken}`;
+    const url = `${process.env.FRONTEND_HOST}/authentication//reset/${resetToken}`;
 
     await this.mailerService.sendMail({
       to: user.email,

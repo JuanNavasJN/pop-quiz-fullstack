@@ -8,6 +8,9 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { CacheProvider, EmotionCache } from "@emotion/react";
 import createEmotionCache from "../src/createEmotionCache";
 import { baselightTheme } from "../src/theme/DefaultColors";
+import AuthProvider from "../src/contexts/AuthContext";
+import NotifyProvider from "../src/contexts/NotifyContext";
+import Notify from "../src/components/shared/Notify";
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
@@ -33,11 +36,16 @@ const MyApp = (props: MyAppProps) => {
         <meta name="viewport" content="initial-scale=1, width=device-width" />
         <title>Pop Quiz</title>
       </Head>
-      <ThemeProvider theme={theme}>
-        {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-        <CssBaseline />
-        {getLayout(<Component {...pageProps} />)}
-      </ThemeProvider>
+      <AuthProvider>
+        <NotifyProvider>
+          <ThemeProvider theme={theme}>
+            {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+            <CssBaseline />
+            {getLayout(<Component {...pageProps} />)}
+            <Notify />
+          </ThemeProvider>
+        </NotifyProvider>
+      </AuthProvider>
     </CacheProvider>
   );
 };

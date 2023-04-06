@@ -22,6 +22,8 @@
     "@tabler/icons": "^2.1.2",
     "@tabler/icons-react": "^2.1.1",
     "apexcharts": "3.36.3",
+    "axios": "^1.3.5",
+    "formik": "^2.2.9",
     "lodash": "^4.17.21",
     "next": "latest",
     "react": "latest",
