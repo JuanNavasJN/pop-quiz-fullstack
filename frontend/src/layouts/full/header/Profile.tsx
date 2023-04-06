@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, FC } from "react";
 import Link from "next/link";
 import {
   Avatar,
@@ -14,9 +14,15 @@ import {
 
 import { IconUser } from "@tabler/icons-react";
 
-const Profile = () => {
+interface ProfileProps {
+  onLogout: () => void;
+  isLogged: boolean;
+}
+
+const Profile: FC<ProfileProps> = ({ onLogout, isLogged }) => {
   const [anchorEl2, setAnchorEl2] = useState(null);
   const handleClick2 = (event: any) => {
+    if (!isLogged) return;
     setAnchorEl2(event.currentTarget);
   };
   const handleClose2 = () => {
@@ -75,11 +81,10 @@ const Profile = () => {
 
         <Box mt={1} py={1} px={2}>
           <Button
-            href="/authentication/login"
             variant="outlined"
             color="primary"
-            component={Link}
             fullWidth
+            onClick={onLogout}
           >
             Logout
           </Button>

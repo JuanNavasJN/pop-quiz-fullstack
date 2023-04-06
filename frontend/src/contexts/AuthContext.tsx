@@ -1,10 +1,18 @@
-import { FC, createContext, useState, ReactNode } from "react";
+import {
+  FC,
+  createContext,
+  useState,
+  ReactNode,
+  useEffect,
+  useCallback,
+} from "react";
 import { LoginParams, User, IAuthContext } from "./AuthContext.types";
 import {
   register,
   login as fetchLogin,
   forgotPassword,
   resetPassword,
+  getMe,
 } from "./AuthRequests";
 
 interface Props {
@@ -18,20 +26,37 @@ export const AuthContext = createContext<IAuthContext>({
   resetPassword: () => new Promise(() => {}),
   user: null,
   token: null,
+  logout: () => {},
 });
 
 const AuthProvider: FC<Props> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
 
-  const login = async (params: LoginParams) => {
+  useEffect(() => {
+    const AT = localStorage.getItem("AT");
+
+    if (AT) {
+      getMe(AT).then((user) => {
+        setUser(user);
+      });
+    }
+  }, []);
+
+  const login = useCallback(async (params: LoginParams) => {
     const res = await fetchLogin(params);
 
     if (res) {
       setUser(res.user);
       setToken(res.token);
+      localStorage.setItem("AT", res.token); // Access Token
     }
-  };
+  }, []);
+
+  const logout = useCallback(() => {
+    localStorage.removeItem("AT");
+    setUser(null);
+  }, []);
 
   const context = {
     register,
@@ -40,6 +65,7 @@ const AuthProvider: FC<Props> = ({ children }) => {
     resetPassword,
     user,
     token,
+    logout,
   };
 
   return (

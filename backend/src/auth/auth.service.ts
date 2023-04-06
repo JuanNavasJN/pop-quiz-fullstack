@@ -19,6 +19,7 @@ import {
   USER_ALREADY_EXISTS,
 } from 'src/constants';
 import { UserRegisterAuthDto } from './dto/user-register-auth.dto';
+import { sanitizeUser } from 'src/users/users.helpers';
 
 @Injectable()
 export class AuthService {
@@ -42,7 +43,7 @@ export class AuthService {
 
       const createdUser = await this.userModel.create(userObject);
 
-      return this.sanitizeUser(createdUser);
+      return sanitizeUser(createdUser);
     } catch (err) {
       throw new HttpException(err.message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
@@ -67,23 +68,12 @@ export class AuthService {
       const token = this.jwtService.sign(payload);
 
       return {
-        user: this.sanitizeUser(user),
+        user: sanitizeUser(user),
         token,
       };
     } catch (err) {
       throw new HttpException(err.message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
-  }
-
-  // return user object without sensitive data
-  sanitizeUser(user: UserDocument) {
-    const sanitized = user.toObject();
-
-    return {
-      _id: sanitized._id,
-      email: sanitized.email,
-      name: sanitized.name,
-    };
   }
 
   async forgotPassowrd(@Body() forgotObject: ForgotAuthDto) {

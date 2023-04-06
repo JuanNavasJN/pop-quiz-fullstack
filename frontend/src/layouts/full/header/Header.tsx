@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   Box,
   AppBar,
@@ -9,6 +9,8 @@ import {
   Button,
 } from "@mui/material";
 import PropTypes from "prop-types";
+import { AuthContext } from "../../../../src/contexts/AuthContext";
+import { useRouter } from "next/router";
 
 // components
 import Profile from "./Profile";
@@ -21,6 +23,8 @@ interface ItemType {
 const Header = ({ toggleMobileSidebar }: ItemType) => {
   // const lgUp = useMediaQuery((theme) => theme.breakpoints.up('lg'));
   // const lgDown = useMediaQuery((theme) => theme.breakpoints.down('lg'));
+  const { user, logout } = useContext(AuthContext);
+  const { push } = useRouter();
 
   const AppBarStyled = styled(AppBar)(({ theme }) => ({
     boxShadow: "none",
@@ -35,6 +39,15 @@ const Header = ({ toggleMobileSidebar }: ItemType) => {
     width: "100%",
     color: theme.palette.text.secondary,
   }));
+
+  const handleClick = (option: "login" | "logout") => {
+    if (option === "logout") {
+      logout();
+      push("/");
+    } else if (option === "login") {
+      push("/authentication/login");
+    }
+  };
 
   return (
     <AppBarStyled position="sticky" color="default">
@@ -54,16 +67,19 @@ const Header = ({ toggleMobileSidebar }: ItemType) => {
         </IconButton>
 
         <Box flexGrow={1} />
+
         <Stack spacing={1} direction="row" alignItems="center">
-          <Button
-            variant="contained"
-            disableElevation
-            color="primary"
-            href="/authentication/login"
-          >
-            Login
-          </Button>
-          <Profile />
+          {!user && (
+            <Button
+              variant="contained"
+              disableElevation
+              color="primary"
+              onClick={() => handleClick("login")}
+            >
+              Login
+            </Button>
+          )}
+          <Profile onLogout={() => handleClick("logout")} isLogged={!!user} />
         </Stack>
       </ToolbarStyled>
     </AppBarStyled>

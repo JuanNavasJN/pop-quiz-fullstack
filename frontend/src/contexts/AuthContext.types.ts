@@ -5,6 +5,7 @@ export interface IAuthContext {
   resetPassword: (params: ResetParams) => Promise<any>;
   user: User | null;
   token: string | null;
+  logout: () => void;
 }
 
 export interface RegisterParams {
@@ -22,6 +23,7 @@ export interface User {
   _id: string;
   email: string;
   name: string;
+  role: "user" | "admin";
 }
 
 export interface LoginResponse {

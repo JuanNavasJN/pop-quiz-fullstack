@@ -8,4 +8,10 @@ export const handleError = (err: AxiosError) => {
   console.error(err);
 };
 
+export const authHeader = (accessToken: string) => ({
+  headers: {
+    Authorization: `Bearer ${accessToken}`,
+  },
+});
+
 export default fetch;

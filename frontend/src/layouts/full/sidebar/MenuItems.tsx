@@ -18,12 +18,14 @@ const Menuitems = [
     title: "Users",
     icon: IconUsers,
     href: "/users",
+    roles: ["admin"],
   },
   {
     id: uniqueId(),
     title: "Events",
     icon: IconCalendarEvent,
     href: "/events",
+    roles: ["user", "admin"],
   },
 ];
 

@@ -6,3 +6,5 @@ export const RESET_TOKEN_NOT_FOUND = 'RESET_TOKEN_NOT_FOUND';
 export const PASSWORD_RESET = 'PASSWORD_RESET';
 export const USER = 'user';
 export const ADMIN = 'admin';
+export const USER_NOT_FOUND = 'USER_NOT_FOUND';
+export const BAD_REQUEST = 'BAD_REQUEST';
