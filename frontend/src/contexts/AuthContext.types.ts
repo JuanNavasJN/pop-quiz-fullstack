@@ -6,6 +6,7 @@ export interface IAuthContext {
   user: User | null;
   token: string | null;
   logout: () => void;
+  isLoading: boolean;
 }
 
 export interface RegisterParams {

@@ -11,6 +11,7 @@ import { baselightTheme } from "../src/theme/DefaultColors";
 import AuthProvider from "../src/contexts/AuthContext";
 import NotifyProvider from "../src/contexts/NotifyContext";
 import Notify from "../src/components/shared/Notify";
+import ModalsProvider from "../src/contexts/ModalsContext";
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
@@ -38,12 +39,14 @@ const MyApp = (props: MyAppProps) => {
       </Head>
       <AuthProvider>
         <NotifyProvider>
-          <ThemeProvider theme={theme}>
-            {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-            <CssBaseline />
-            {getLayout(<Component {...pageProps} />)}
-            <Notify />
-          </ThemeProvider>
+          <ModalsProvider>
+            <ThemeProvider theme={theme}>
+              {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+              <CssBaseline />
+              {getLayout(<Component {...pageProps} />)}
+              <Notify />
+            </ThemeProvider>
+          </ModalsProvider>
         </NotifyProvider>
       </AuthProvider>
     </CacheProvider>

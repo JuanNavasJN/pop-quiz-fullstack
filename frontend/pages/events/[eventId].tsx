@@ -2,12 +2,12 @@ import { ReactElement, useContext, useEffect } from "react";
 import PageContainer from "../../src/components/container/PageContainer";
 import { AuthContext } from "../../src/contexts/AuthContext";
 import { useRouter } from "next/router";
-import Events from "../../src/components/events";
+import Event from "../../src/components/events/Event";
 
 // components
 import FullLayout from "../../src/layouts/full/FullLayout";
 
-export default function EventsPage() {
+export default function EventPage() {
   const { user, isLoading } = useContext(AuthContext);
   const { push } = useRouter();
 
@@ -16,12 +16,12 @@ export default function EventsPage() {
   }, [isLoading, user]);
 
   return (
-    <PageContainer title="Events" description="this is Events">
-      <Events />
+    <PageContainer title="Event" description="this is Event">
+      <Event />
     </PageContainer>
   );
 }
 
-EventsPage.getLayout = function getLayout(page: ReactElement) {
+EventPage.getLayout = function getLayout(page: ReactElement) {
   return <FullLayout>{page}</FullLayout>;
 };

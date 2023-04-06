@@ -8,12 +8,12 @@ import { useRouter } from "next/router";
 import FullLayout from "../../src/layouts/full/FullLayout";
 
 export default function MyProfile() {
-  const { user } = useContext(AuthContext);
+  const { user, isLoading } = useContext(AuthContext);
   const { push } = useRouter();
 
   useEffect(() => {
-    if (!user) push("/");
-  }, [user]);
+    if (!isLoading && !user) push("/");
+  }, [isLoading, user]);
 
   return (
     <PageContainer title="My Profile" description="this is MyProfile">

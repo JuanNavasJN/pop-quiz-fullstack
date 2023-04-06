@@ -14,13 +14,13 @@ const baselightTheme = createTheme({
       dark: "#cde74c",
     },
     success: {
-      main: "#13DEB9",
+      main: "#50AD2E",
       light: "#E6FFFA",
       dark: "#02b3a9",
       contrastText: "#ffffff",
     },
     info: {
-      main: "#539BFF",
+      main: "#7088BF",
       light: "#EBF3FE",
       dark: "#1682d4",
       contrastText: "#ffffff",

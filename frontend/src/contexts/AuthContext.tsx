@@ -27,19 +27,37 @@ export const AuthContext = createContext<IAuthContext>({
   user: null,
   token: null,
   logout: () => {},
+  isLoading: true,
 });
 
 const AuthProvider: FC<Props> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const logout = useCallback(() => {
+    localStorage.removeItem("AT");
+    setUser(null);
+  }, []);
 
   useEffect(() => {
     const AT = localStorage.getItem("AT");
 
     if (AT) {
-      getMe(AT).then((user) => {
-        setUser(user);
-      });
+      getMe(AT)
+        .then((user) => {
+          setUser(user);
+        })
+        .catch((err) => {
+          if (err.response && err.response.status === 401) {
+            logout();
+          } else {
+            console.error(err);
+          }
+        })
+        .finally(() => setIsLoading(false));
+    } else {
+      setIsLoading(false);
     }
   }, []);
 
@@ -53,11 +71,6 @@ const AuthProvider: FC<Props> = ({ children }) => {
     }
   }, []);
 
-  const logout = useCallback(() => {
-    localStorage.removeItem("AT");
-    setUser(null);
-  }, []);
-
   const context = {
     register,
     login,
@@ -66,6 +79,7 @@ const AuthProvider: FC<Props> = ({ children }) => {
     user,
     token,
     logout,
+    isLoading,
   };
 
   return (
