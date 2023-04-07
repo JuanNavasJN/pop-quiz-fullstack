@@ -1,7 +1,10 @@
+import { useContext, useEffect } from "react";
 import Link from "next/link";
 import type { ReactElement } from "react";
 import { Grid, Box, Card, Stack, Typography } from "@mui/material";
 import BlankLayout from "../../../src/layouts/blank/BlankLayout";
+import { AuthContext } from "../../../src/contexts/AuthContext";
+import { useRouter } from "next/router";
 
 // components
 import PageContainer from "../../../src/components/container/PageContainer";
@@ -9,6 +12,13 @@ import Logo from "../../../src/layouts/full/shared/logo/Logo";
 import AuthLogin from "../auth/AuthLogin";
 
 const Login = () => {
+  const { user } = useContext(AuthContext);
+  const { push } = useRouter();
+
+  useEffect(() => {
+    if (user) push("/");
+  }, [user]);
+
   return (
     <PageContainer title="Login" description="this is Login page">
       <Box
