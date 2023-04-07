@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { FC, useContext, useEffect, useState } from "react";
 import Modal from "../shared/Modal";
 import Typography from "@mui/material/Typography";
 import { ModalsContext } from "../../contexts/ModalsContext";
@@ -10,10 +10,19 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { Formik } from "formik";
 import { Dayjs } from "dayjs";
 import FormErrorMessage from "../shared/FormErrorMessage";
+import { createEvent } from "../../repositories/events";
+import { AuthContext } from "../../contexts/AuthContext";
+import { NotifyContext } from "../../contexts/NotifyContext";
 
-const AddEventModal = () => {
+interface AddEventModalProps {
+  getEvents: () => void;
+}
+
+const AddEventModal: FC<AddEventModalProps> = ({ getEvents }) => {
   const { isAddEventModalOpen, toggleAddEventModal } =
     useContext(ModalsContext);
+  const { token } = useContext(AuthContext);
+  const { notify } = useContext(NotifyContext);
 
   const [datetime, setDatetime] = useState<Dayjs | undefined>();
   const [dateIsValid, setDateIsValid] = useState(false);
@@ -58,25 +67,24 @@ const AddEventModal = () => {
           validate={validate}
           onSubmit={async (values, { setSubmitting }) => {
             try {
-              console.log(values, datetime?.toISOString());
-              // await login(values);
-              // setSubmitting(false);
-              // push("/");
+              if (!datetime) throw new Error("No datetime");
+
+              if (!token) throw new Error("No token");
+
+              await createEvent(token, {
+                ...values,
+                datetime: datetime.toISOString(),
+              });
+              getEvents();
+              setSubmitting(false);
+              toggleAddEventModal();
+              setDatetime(undefined);
             } catch (err: any) {
-              // if (
-              //   err.response &&
-              //   (err.response.status === 404 || err.response.status === 403)
-              // ) {
-              //   notify({
-              //     type: "error",
-              //     message: "Invalid email or password.",
-              //   });
-              // } else {
-              //   notify({
-              //     type: "error",
-              //     message: "Sorry, something went wrong.",
-              //   });
-              // }
+              console.error(err);
+              notify({
+                type: "error",
+                message: "Sorry, something went wrong.",
+              });
             }
           }}
         >

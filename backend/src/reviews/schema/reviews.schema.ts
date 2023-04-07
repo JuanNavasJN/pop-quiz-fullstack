@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Schema as SchemaType } from 'mongoose';
-import { Event } from 'src/events/schema/events.schema';
-import { User } from 'src/users/schema/users.schema';
+import { EventDocument } from 'src/events/schema/events.schema';
+import { UserDocument } from 'src/users/schema/users.schema';
 
 export type ReviewDocument = Review & Document;
 
@@ -17,10 +17,12 @@ export class Review {
   isDraft: boolean;
 
   @Prop({ required: true, type: SchemaType.Types.ObjectId, ref: 'User' })
-  createdBy: User;
+  createdBy: UserDocument;
 
   @Prop({ required: true, type: SchemaType.Types.ObjectId, ref: 'Event' })
-  event: Event;
+  event: EventDocument;
 }
 
 export const ReviewSchema = SchemaFactory.createForClass(Review);
+
+ReviewSchema.index({ createdBy: 1, event: 1 }, { unique: true });

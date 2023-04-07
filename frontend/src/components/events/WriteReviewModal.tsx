@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { FC, useContext, useEffect, useState } from "react";
 import Modal from "../shared/Modal";
 import Typography from "@mui/material/Typography";
 import { ModalsContext } from "../../contexts/ModalsContext";
@@ -6,46 +6,70 @@ import CustomTextField from "../forms/theme-elements/CustomTextField";
 import { Box, Button, Rating, Stack } from "@mui/material";
 import { Formik } from "formik";
 import FormErrorMessage from "../shared/FormErrorMessage";
+import { AuthContext } from "../../contexts/AuthContext";
+import { NotifyContext } from "../../contexts/NotifyContext";
+import { createReview } from "../../repositories/reviews";
 
-const WriteReviewModal = () => {
-  const { isWriteReviewModalOpen, toggleWriteReviewModal } =
+interface WriteReviewModalProps {
+  getEvents: () => void;
+}
+
+const WriteReviewModal: FC<WriteReviewModalProps> = ({ getEvents }) => {
+  const { isWriteReviewModalOpen, toggleWriteReviewModal, eventId, myReview } =
     useContext(ModalsContext);
   const [rating, setRating] = useState<number | null>(null);
+  const { token } = useContext(AuthContext);
+  const { notify } = useContext(NotifyContext);
 
   const initialValues = {
     comment: "",
   };
 
+  useEffect(() => {
+    if (myReview) {
+      setRating(myReview.rating);
+    } else {
+      setRating(null);
+    }
+  }, [myReview]);
+
   return (
-    <Modal open={isWriteReviewModalOpen} onClose={toggleWriteReviewModal}>
+    <Modal
+      open={isWriteReviewModalOpen}
+      onClose={() => toggleWriteReviewModal()}
+    >
       <>
         <Typography id="modal-modal-title" variant="h5" component="h2">
-          Leave your review
+          {myReview ? "Your Review" : "Leave your review"}
         </Typography>
 
         <Formik
           initialValues={initialValues}
           onSubmit={async (values, { setSubmitting }) => {
             try {
-              console.log(values, rating);
-              // await login(values);
-              // setSubmitting(false);
-              // push("/");
+              if (!token) throw new Error("No token");
+              if (!rating) throw new Error("No rating");
+              if (!eventId) throw new Error("No eventId");
+
+              await createReview(token, {
+                ...values,
+                rating,
+                eventId,
+              });
+              notify({
+                type: "success",
+                message: "Thank you for your review.",
+              });
+              getEvents();
+              setSubmitting(false);
+              toggleWriteReviewModal();
+              setRating(null);
             } catch (err: any) {
-              // if (
-              //   err.response &&
-              //   (err.response.status === 404 || err.response.status === 403)
-              // ) {
-              //   notify({
-              //     type: "error",
-              //     message: "Invalid email or password.",
-              //   });
-              // } else {
-              //   notify({
-              //     type: "error",
-              //     message: "Sorry, something went wrong.",
-              //   });
-              // }
+              console.error(err);
+              notify({
+                type: "error",
+                message: "Sorry, something went wrong.",
+              });
             }
           }}
         >
@@ -74,7 +98,9 @@ const WriteReviewModal = () => {
                   <Box>
                     <Rating
                       name="rating"
+                      value={rating}
                       onChange={(_, newValue) => setRating(newValue)}
+                      readOnly={!!myReview}
                     />
                   </Box>
                 </Box>
@@ -92,7 +118,8 @@ const WriteReviewModal = () => {
                   <CustomTextField
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    value={values.comment}
+                    value={myReview ? myReview.comment : values.comment}
+                    disabled={!!myReview}
                     name="comment"
                     variant="outlined"
                     fullWidth
@@ -103,16 +130,18 @@ const WriteReviewModal = () => {
                 </Box>
 
                 <Box mt={2}>
-                  <Button
-                    color="primary"
-                    variant="contained"
-                    size="large"
-                    fullWidth
-                    type="submit"
-                    disabled={isSubmitting || !rating}
-                  >
-                    Send Review
-                  </Button>
+                  {!myReview && (
+                    <Button
+                      color="primary"
+                      variant="contained"
+                      size="large"
+                      fullWidth
+                      type="submit"
+                      disabled={isSubmitting || !rating}
+                    >
+                      Send Review
+                    </Button>
+                  )}
                 </Box>
               </Stack>
             </form>

@@ -47,6 +47,7 @@ const AuthProvider: FC<Props> = ({ children }) => {
       getMe(AT)
         .then((user) => {
           setUser(user);
+          setToken(AT);
         })
         .catch((err) => {
           if (err.response && err.response.status === 401) {

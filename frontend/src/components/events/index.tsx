@@ -4,24 +4,26 @@ import EventsContainer from "./EventsContainer";
 import { IconPlus } from "@tabler/icons-react";
 import { useContext } from "react";
 import { ModalsContext } from "../../contexts/ModalsContext";
-import AddEventModal from "./AddEventModal";
+import { AuthContext } from "../../contexts/AuthContext";
 
 const Events = () => {
   const { toggleAddEventModal } = useContext(ModalsContext);
+  const { token, user } = useContext(AuthContext);
 
   return (
     <Box>
       <Grid container spacing={3}>
         <Grid item xs={12}>
-          <AddEventModal />
           <DashboardCard
             title="Events"
             tooltipOption={
-              <Tooltip title="Add Event" onClick={toggleAddEventModal}>
-                <Fab size="small" color="secondary">
-                  <IconPlus size="16" />
-                </Fab>
-              </Tooltip>
+              user && user.role === "admin" ? (
+                <Tooltip title="Add Event" onClick={toggleAddEventModal}>
+                  <Fab size="small" color="secondary">
+                    <IconPlus size="16" />
+                  </Fab>
+                </Tooltip>
+              ) : undefined
             }
           >
             <Grid container spacing={3}>

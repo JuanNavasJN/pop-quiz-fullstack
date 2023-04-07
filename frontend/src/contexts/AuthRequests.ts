@@ -1,5 +1,5 @@
 import fetch, { authHeader, handleError } from "../helpers/fetch";
-import { AxiosError, AxiosResponse } from "axios";
+import { AxiosError } from "axios";
 import {
   RegisterParams,
   LoginParams,

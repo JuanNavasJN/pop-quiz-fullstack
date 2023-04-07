@@ -20,7 +20,7 @@ export class EventsService {
     });
   }
 
-  async findAll() {
+  async findAll(userId: string) {
     const events = await this.eventModel.find({});
     const eventsWithRating = [];
 
@@ -28,13 +28,23 @@ export class EventsService {
       // Calculate event rating by every review
       const reviews = await this.reviewModel.find({ event: event._id });
       let rating = 0;
-      const sum = reviews.reduce((prev, curr) => curr.rating + prev, 0);
+      let sum = 0;
+      let myReview: ReviewDocument;
+
+      for (const review of reviews) {
+        sum += review.rating;
+
+        if ((review.createdBy.toJSON() as string) === userId) {
+          myReview = review;
+        }
+      }
 
       if (sum) rating = sum / reviews.length;
 
       eventsWithRating.push({
         ...event.toObject(),
         rating,
+        myReview,
       });
     }
 

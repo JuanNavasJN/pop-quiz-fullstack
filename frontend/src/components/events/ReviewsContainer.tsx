@@ -1,47 +1,28 @@
 import { Grid, Rating, Stack, Typography } from "@mui/material";
 import DashboardCard from "../shared/DashboardCard";
-
-const reviews = [
-  {
-    id: "22",
-    comment:
-      "Exercitation eu ipsum excepteur voluptate eiusmod in amet minim dolor incididunt ad eu.",
-    rating: 3,
-    createdAt: "12-12-2023 23:23:23",
-    createdBy: "John P",
-  },
-  {
-    id: "223",
-    comment:
-      "Exercitation eu ipsum excepteur voluptate eiusmod in amet minim dolor incididunt ad eu.",
-    rating: 3,
-    createdAt: "12-12-2023 23:23:23",
-    createdBy: "John P",
-  },
-  {
-    id: "224",
-    comment:
-      "Exercitation eu ipsum excepteur voluptate eiusmod in amet minim dolor incididunt ad eu.",
-    rating: 3,
-    createdAt: "12-12-2023 23:23:23",
-    createdBy: "John P",
-  },
-  {
-    id: "225",
-    comment:
-      "Exercitation eu ipsum excepteur voluptate eiusmod in amet minim dolor incididunt ad eu.",
-    rating: 3,
-    createdAt: "12-12-2023 23:23:23",
-    createdBy: "John P",
-  },
-];
+import { useRouter } from "next/router";
+import { useContext, useEffect, useState } from "react";
+import { AuthContext } from "../../contexts/AuthContext";
+import { Review, getReviewsByEventId } from "../../repositories/reviews";
 
 const ReviewsContainer = () => {
+  const { query } = useRouter();
+  const { token, user } = useContext(AuthContext);
+  const [reviews, setReviews] = useState<Review[]>([]);
+
+  useEffect(() => {
+    if (user && token && query && query._id) {
+      getReviewsByEventId(token, query._id as string).then((revws) => {
+        setReviews(revws);
+      });
+    }
+  }, [token, user, query]);
+
   return (
     <Grid item xs={12}>
       <Stack paddingX={5} spacing={2}>
         {reviews.map((review) => (
-          <DashboardCard key={review.id}>
+          <DashboardCard key={review._id}>
             <Grid container>
               <Grid item xs={12} sm={12}>
                 <Rating
@@ -54,10 +35,11 @@ const ReviewsContainer = () => {
                   {review.comment}
                 </Typography>
                 <Typography color="textSecondary" mt={1}>
-                  {review.createdBy}
+                  {review.createdBy?.name}
                 </Typography>
                 <Typography color="textSecondary" mt={1}>
-                  {review.createdAt}
+                  {review.createdAt &&
+                    new Date(review.createdAt).toLocaleString()}
                 </Typography>
               </Grid>
             </Grid>

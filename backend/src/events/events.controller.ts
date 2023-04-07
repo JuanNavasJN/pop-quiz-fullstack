@@ -30,8 +30,8 @@ export class EventsController {
 
   @Get()
   @UseGuards(JwtAuthGuard)
-  findAll() {
-    return this.eventsService.findAll();
+  findAll(@Request() req) {
+    return this.eventsService.findAll(req.user.id);
   }
 
   @Delete(':eventId')

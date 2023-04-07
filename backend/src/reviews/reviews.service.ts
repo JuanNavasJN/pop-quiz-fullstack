@@ -4,6 +4,8 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Review, ReviewDocument } from './schema/reviews.schema';
 import { Model } from 'mongoose';
 import { CreateReviewDto } from './dto/create-review.dto';
+import { sanitizeUser } from 'src/users/users.helpers';
+import { UserDocument } from 'src/users/schema/users.schema';
 
 @Injectable()
 export class ReviewsService {
@@ -20,6 +22,13 @@ export class ReviewsService {
   }
 
   async findAllByEventId(eventId: string) {
-    return await this.reviewModel.find({ event: eventId });
+    const reviews = await this.reviewModel
+      .find({ event: eventId })
+      .populate('createdBy');
+
+    return reviews.map((review) => ({
+      ...review.toObject(),
+      createdBy: sanitizeUser(review.createdBy as UserDocument),
+    }));
   }
 }
