@@ -5,6 +5,7 @@ import {
   Rating,
   Tooltip,
   Fab,
+  CircularProgress,
 } from "@mui/material";
 import { Stack } from "@mui/system";
 import BlankCard from "../shared/BlankCard";
@@ -39,69 +40,69 @@ const EventsContainer = () => {
     <Grid container spacing={3}>
       <AddEventModal getEvents={getEvents} />
       <WriteReviewModal getEvents={getEvents} />
+      {events.length === 0 && (
+        <Grid item xs={12}>
+          <Stack justifyContent="center" alignItems="center">
+            <CircularProgress />
+          </Stack>
+        </Grid>
+      )}
       {events.map((event, index) => (
         <Grid item xs={12} md={6} lg={4} key={index}>
           <BlankCard>
             <CardContent sx={{ p: 3, pt: 2 }}>
               <Typography variant="h6">{event.title}</Typography>
-              <Stack
-                direction="row"
-                alignItems="center"
-                justifyContent="space-between"
-                mt={1}
-              >
-                <Stack direction="column">
-                  <Stack
-                    direction="row"
-                    alignItems="center"
-                    justifyContent="space-between"
-                  >
-                    <Rating
-                      name="read-only"
-                      size="small"
-                      value={event.rating}
-                      readOnly
-                    />
-                    <Stack direction="row" alignItems="center" spacing={1}>
+              <Stack direction="column">
+                <Stack
+                  direction="row"
+                  alignItems="center"
+                  justifyContent="space-between"
+                >
+                  <Rating
+                    name="read-only"
+                    size="small"
+                    value={event.rating}
+                    readOnly
+                  />
+                  <Stack direction="row" alignItems="center" spacing={1}>
+                    <Tooltip
+                      title={
+                        event.myReview ? "View Your Review" : "Write Review"
+                      }
+                      onClick={() =>
+                        toggleWriteReviewModal(event._id!, event.myReview)
+                      }
+                    >
+                      <Fab size="small" color="info">
+                        <IconPencil size="16" />
+                      </Fab>
+                    </Tooltip>
+                    {user && user.role === "admin" && (
                       <Tooltip
-                        title={
-                          event.myReview ? "View Your Review" : "Write Review"
-                        }
+                        title="View Reviews"
                         onClick={() =>
-                          toggleWriteReviewModal(event._id!, event.myReview)
+                          push({
+                            pathname: `/events/${event._id}`,
+                            query: event as any,
+                          })
                         }
                       >
                         <Fab size="small" color="info">
-                          <IconPencil size="16" />
+                          <IconStar size="16" />
                         </Fab>
                       </Tooltip>
-                      {user && user.role === "admin" && (
-                        <Tooltip
-                          title="View Reviews"
-                          onClick={() =>
-                            push({
-                              pathname: `/events/${event._id}`,
-                              query: event as any,
-                            })
-                          }
-                        >
-                          <Fab size="small" color="info">
-                            <IconStar size="16" />
-                          </Fab>
-                        </Tooltip>
-                      )}
-                    </Stack>
+                    )}
                   </Stack>
-                  <Typography color="textSecondary" textAlign="justify" mt={1}>
-                    {event.description}
-                  </Typography>
-                  <Typography color="textSecondary" mt={1}>
-                    {new Date(event.datetime).toLocaleString()}
-                  </Typography>
-                  <Typography color="textSecondary" mt={1}>
-                    {event.location}
-                  </Typography>
                 </Stack>
+                <Typography color="textSecondary" textAlign="justify" mt={1}>
+                  {event.description}
+                </Typography>
+                <Typography color="textSecondary" mt={1}>
+                  {new Date(event.datetime).toLocaleString()}
+                </Typography>
+                <Typography color="textSecondary" mt={1}>
+                  {event.location}
+                </Typography>
               </Stack>
             </CardContent>
           </BlankCard>

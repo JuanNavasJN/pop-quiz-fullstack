@@ -1,4 +1,10 @@
-import { Grid, Rating, Stack, Typography } from "@mui/material";
+import {
+  CircularProgress,
+  Grid,
+  Rating,
+  Stack,
+  Typography,
+} from "@mui/material";
 import DashboardCard from "../shared/DashboardCard";
 import { useRouter } from "next/router";
 import { useContext, useEffect, useState } from "react";
@@ -20,6 +26,13 @@ const ReviewsContainer = () => {
 
   return (
     <Grid item xs={12}>
+      {reviews.length === 0 && (
+        <Grid item xs={12}>
+          <Stack justifyContent="center" alignItems="center">
+            <CircularProgress />
+          </Stack>
+        </Grid>
+      )}
       <Stack paddingX={5} spacing={2}>
         {reviews.map((review) => (
           <DashboardCard key={review._id}>
