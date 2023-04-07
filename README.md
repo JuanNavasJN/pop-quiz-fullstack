@@ -35,3 +35,13 @@ password: password
 ## DB Schema
 
 <img src="./docs/db.png" />
+
+## Screenshots
+
+<img src="./docs/screenshots/home-news.png" />
+
+<img src="./docs/screenshots/login.png" />
+
+<img src="./docs/screenshots/events.png" />
+
+<img src="./docs/screenshots/event-reviews.png" />
