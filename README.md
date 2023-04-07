@@ -6,6 +6,13 @@ Pop Quiz - An MVP for an event management review and rating app.
 
 You can see a live demo here https://pop-quiz.juannavas.dev/
 
+**Admin credentials for live demo:**
+
+```
+email: admin@veest.net
+password: password
+```
+
 **Note:** Each side `/frontend` and `/backend` have their own README. [Frontend - README](./frontend/README.md) [Backend - README](./backend/README.md)
 
 ## Features
