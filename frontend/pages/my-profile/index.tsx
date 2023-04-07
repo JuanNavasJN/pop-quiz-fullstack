@@ -1,13 +1,14 @@
 import { ReactElement, useContext, useEffect } from "react";
-import { Grid, Box } from "@mui/material";
+import { Box } from "@mui/material";
 import PageContainer from "../../src/components/container/PageContainer";
 import { AuthContext } from "../../src/contexts/AuthContext";
 import { useRouter } from "next/router";
+import MyProfile from "../../src/components/my-profile";
 
 // components
 import FullLayout from "../../src/layouts/full/FullLayout";
 
-export default function MyProfile() {
+export default function MyProfilePage() {
   const { user, isLoading } = useContext(AuthContext);
   const { push } = useRouter();
 
@@ -16,16 +17,14 @@ export default function MyProfile() {
   }, [isLoading, user]);
 
   return (
-    <PageContainer title="My Profile" description="this is MyProfile">
+    <PageContainer title="My Profile" description="this is MyProfilePage">
       <Box>
-        <Grid container spacing={3}>
-          <Grid item xs={12}></Grid>
-        </Grid>
+        <MyProfile />
       </Box>
     </PageContainer>
   );
 }
 
-MyProfile.getLayout = function getLayout(page: ReactElement) {
+MyProfilePage.getLayout = function getLayout(page: ReactElement) {
   return <FullLayout>{page}</FullLayout>;
 };

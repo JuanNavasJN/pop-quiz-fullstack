@@ -1,4 +1,4 @@
-import { IconUsers, IconCalendarEvent, IconNews } from "@tabler/icons-react";
+import { IconCalendarEvent, IconNews } from "@tabler/icons-react";
 
 import { uniqueId } from "lodash";
 
