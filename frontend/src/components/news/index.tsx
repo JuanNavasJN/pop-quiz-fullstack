@@ -17,9 +17,14 @@ import { Article, getAllNews } from "../../repositories/news";
 
 const News = () => {
   const [news, setNews] = useState<Article[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    getAllNews().then((news) => setNews(news));
+    setIsLoading(true);
+    getAllNews().then((news) => {
+      setNews(news);
+      setIsLoading(false);
+    });
   }, []);
 
   return (
@@ -28,7 +33,7 @@ const News = () => {
         <Grid item xs={12}>
           <DashboardCard title="News">
             <Grid container spacing={3}>
-              {news.length === 0 && (
+              {isLoading && (
                 <Grid item xs={12}>
                   <Stack justifyContent="center" alignItems="center">
                     <CircularProgress />

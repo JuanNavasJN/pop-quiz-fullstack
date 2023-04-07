@@ -23,11 +23,14 @@ const EventsContainer = () => {
   const { toggleWriteReviewModal } = useContext(ModalsContext);
   const { token, user } = useContext(AuthContext);
   const [events, setEvents] = useState<Event[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const getEvents = useCallback(() => {
     if (user && token) {
+      setIsLoading(true);
       getAllEvents(token).then((evts) => {
         setEvents(evts);
+        setIsLoading(false);
       });
     }
   }, [user, token]);
@@ -40,7 +43,7 @@ const EventsContainer = () => {
     <Grid container spacing={3}>
       <AddEventModal getEvents={getEvents} />
       <WriteReviewModal getEvents={getEvents} />
-      {events.length === 0 && (
+      {isLoading && (
         <Grid item xs={12}>
           <Stack justifyContent="center" alignItems="center">
             <CircularProgress />

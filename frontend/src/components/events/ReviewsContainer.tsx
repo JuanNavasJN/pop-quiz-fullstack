@@ -15,18 +15,21 @@ const ReviewsContainer = () => {
   const { query } = useRouter();
   const { token, user } = useContext(AuthContext);
   const [reviews, setReviews] = useState<Review[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (user && token && query && query._id) {
+      setIsLoading(true);
       getReviewsByEventId(token, query._id as string).then((revws) => {
         setReviews(revws);
+        setIsLoading(false);
       });
     }
   }, [token, user, query]);
 
   return (
     <Grid item xs={12}>
-      {reviews.length === 0 && (
+      {isLoading && (
         <Grid item xs={12}>
           <Stack justifyContent="center" alignItems="center">
             <CircularProgress />
