@@ -1,10 +1,32 @@
 # pop-quiz-frontend
 
-Using Material UI, Next.js, TypeScript
+## Description
 
-Install it and run:
+Frontend side of the Pop Quiz. Made using Next.js, TypeScript and Material UI.
 
-```sh
-npm install
-npm run dev
+## Installation
+
+```bash
+$ npm install
 ```
+
+## Required environment variables
+
+```bash
+NEXT_PUBLIC_BACKEND_HOST=
+```
+
+## Running the app
+
+```bash
+# development
+$ npm run dev
+
+# build production mode
+$ npm run build
+
+```
+
+## License
+
+pop-quiz-frontend is [MIT licensed](LICENSE).

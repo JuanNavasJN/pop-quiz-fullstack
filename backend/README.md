@@ -2,7 +2,7 @@
 
 ## Description
 
-Using [Nest](https://github.com/nestjs/nest) framework TypeScript.
+Backend side of the Pop Quiz. Made using [Nest](https://github.com/nestjs/nest) framework TypeScript along with MongoDB.
 
 ## Installation
 
@@ -24,6 +24,8 @@ MAIL_PASSWORD=
 MAIL_FROM=
 
 FRONTEND_HOST=
+
+NEWS_API_KEY=
 ```
 
 ## Running the app
