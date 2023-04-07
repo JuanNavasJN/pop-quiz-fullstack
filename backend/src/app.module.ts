@@ -8,6 +8,7 @@ import { AuthModule } from './auth/auth.module';
 import { MailModule } from './mail/mail.module';
 import { EventsModule } from './events/events.module';
 import { ReviewsModule } from './reviews/reviews.module';
+import { NewsModule } from './news/news.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { ReviewsModule } from './reviews/reviews.module';
     MailModule,
     EventsModule,
     ReviewsModule,
+    NewsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
