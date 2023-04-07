@@ -8,7 +8,7 @@ import { AuthContext } from "../../contexts/AuthContext";
 
 const Events = () => {
   const { toggleAddEventModal } = useContext(ModalsContext);
-  const { token, user } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
 
   return (
     <Box>
