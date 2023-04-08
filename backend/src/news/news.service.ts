@@ -8,7 +8,6 @@ export class NewsService {
 
     const { articles } = await newsapi.v2.everything({
       q: 'malaysia',
-      from: '2023-03-07',
       language: 'en',
       sortBy: 'publishedAt',
       pageSize: 20,
